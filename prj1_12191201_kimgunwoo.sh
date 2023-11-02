@@ -99,6 +99,21 @@ do
 		    break
 		    fi		
 		    done
+	elif [ $choice = 8 ];
+	then
+		echo -n "Do you want to get the average 'rating' of movies rated by users with 'age' between 20 and 29 and 'occupation' as 'programmer'?(y/n): "
+		read yn
+		if [ "$yn" == "y" ];
+		then
+		arr=()
+			#get 20~29 and programmer
+		while read -r line; do
+		     arr+=("$line")
+		     done < <(awk -F '|' -v L="programmer" '$4 == L && $2 < 30 && $2 > 19 {print $1}' u.user)
+		     for value in "${arr[@]}"; do
+		         echo "$value"
+			 done
+	fi
 	fi
 	done
 
