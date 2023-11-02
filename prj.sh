@@ -9,7 +9,7 @@ echo "[ MENU ]"
         echo "4. Delete the 'IMDb URL' from 'u.item'"
         echo "5. Get the data about users from 'u.user'"
         echo "6. Modify the format of 'release date; in 'u.item'"
-        echo "Get the data of movies rated by a specific 'user id' from 'u.data'"
+        echo "7. Get the data of movies rated by a specific 'user id' from 'u.data'"
         echo "8. Get the average 'rating' of movies rated by users with 'age' between 20 and 29 and 'occupation' as 'programmer'"
         echo "9. Exit"
 	echo "-----------------------------------------------------"
@@ -79,8 +79,18 @@ do
 	then
 		echo -n "Please enter the 'user id'(1~943):"
 		read id
-		awk -v L="$id" '$1 == L  {print $2}' u.data | sort -n | awk '{ORS ="|";print}'
-		count=0
+		awk -v L="$id" '$1 == L  {print $2}' u.data | sort -n | awk '{ORS ="|";print}' | sed 's/|$//'
+		echo ""
+		while read -r line; do
+		    my_array+=("$line")
+		    done < <(awk -v L="$id" '$1 == L {print $2}' u.data)
+			
+
+		sorted_array=($(printf "%s\n" "${my_array[@]}" | sort -n))
+		for value in "${sorted_array[@]}"; do
+		    echo "$value"
+		    done
 	fi
 	done
+
 
