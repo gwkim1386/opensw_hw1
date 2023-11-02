@@ -81,16 +81,24 @@ do
 		read id
 		awk -v L="$id" '$1 == L  {print $2}' u.data | sort -n | awk '{ORS ="|";print}' | sed 's/|$//'
 		echo ""
-		while read -r line; do
-		    my_array+=("$line")
-		    done < <(awk -v L="$id" '$1 == L {print $2}' u.data)
-			
+		arr=()
+		soArr=()
 
-		sorted_array=($(printf "%s\n" "${my_array[@]}" | sort -n))
-		for value in "${sorted_array[@]}"; do
-		    echo "$value"
+		while read -r line; do
+		    arr+=("$line")
+		    done < <(awk -v L="$id" '$1 == L {print $2}' u.data)
+		soArr=($(printf "%s\n" "${arr[@]}" | sort -n))
+		count=0
+		echo ""
+		for value in "${soArr[@]}"; do
+		    if [ $count -lt 10 ]; then
+	            line="$value"
+		    awk -F '|' -v L="$value" '$1 == L {print $1"|" $2}' u.item
+		    count=$((count + 1))				   
+		    else	
+		    break
+		    fi		
 		    done
 	fi
 	done
-
 
